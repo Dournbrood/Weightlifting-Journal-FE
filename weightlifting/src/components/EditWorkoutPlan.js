@@ -5,8 +5,9 @@ import { FormWrapper, FormContainer, TextInput, SelectInput, WorkoutPlanInput, B
 import { useContext } from 'react';
 import { store } from "../reducers/WorkoutReducer";
 
-const CreatePlan = (props) => {
+const EditWorkoutPlan = (props) => {
     const { dispatch } = useContext(store);
+
 
     const [workoutPlan, setWorkoutPlan] = useState({
         user_id: Number(localStorage.getItem("user_id")),
@@ -23,6 +24,23 @@ const CreatePlan = (props) => {
         target_region: "",
     }]);
 
+    //gets WorkoutPlan and all exercises associated to specific plan by dynamic ID
+    /*useEffect(() => {
+        axiosWithAuth()
+            .get(`/workouts/all_workouts`)
+            .then(response => {
+                console.log('EDIT RESPONSE IS HERE:'response)
+
+                // need to wait for api endpoint structure
+                // setWorkoutPlan(response.data)
+            })
+            .catch(error => {
+                console.log('Sorry, no workout id returned', error)
+            })
+.
+    }, [props.match.params.id]) */
+
+    //gets exercise list
     useEffect(() => {
         axiosWithAuth()
             .get("/workouts/exercises")
@@ -34,6 +52,7 @@ const CreatePlan = (props) => {
                 console.log(error);
             });
     }, []);
+
 
     const [formData, setFormData] = useState({
         // workoutplan: '',
@@ -194,7 +213,7 @@ const CreatePlan = (props) => {
     }
     return (
         <div>
-            <h1>Create your custom workout plan</h1>
+            <h1>Update your workout plan!</h1>
             <form onSubmit={handleOnSubmitForm} >
                 <div>
                     <WorkoutPlanInput
@@ -214,7 +233,7 @@ const CreatePlan = (props) => {
                 </div>
                 <div>
                     <FormWrapper>
-                        <h1>Add your custom exercises to your plan</h1>
+                        <h3>Add or remove exercises from your plan</h3>
                         <FormContainer>
                             <LabelStyle>Exercise name</LabelStyle>
                             {/* <TextInput
@@ -308,11 +327,11 @@ const CreatePlan = (props) => {
                         )
                     })}
                     <div>
-                        <ButtonStyle type='submit'>Create plan</ButtonStyle>
+                        <ButtonStyle type='submit'>Update plan</ButtonStyle>
                     </div>
                 </div>
             </form>
         </div >
     );
 }
-export default CreatePlan;
+export default EditWorkoutPlan;
